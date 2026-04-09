@@ -48,4 +48,20 @@ nav a.current {
 nav a:hover {
   border-bottom: 0.4em solid var(--color-accent);
   padding-bottom: 0.1em;
+  background-color: oklch(from var(--color-accent) 95% 5% h);
+}
+
+input, textarea, button {
+  font: inherit;
+}
+
+label {
+  display: block;
+  margin-block: 0.5em;
+}
+
+input, textarea, button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
