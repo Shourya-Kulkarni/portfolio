@@ -92,16 +92,33 @@ h1 {
   font-size: 400%;
 }
 
-.resume section {
-  margin-block: 2em;
-  border-top: 1px solid oklch(80% 3% 200);
-  padding-top: 1em;
+.resume {
+  max-width: 50em;
 }
 
-.resume article {
-  margin-block: 1em;
+.resume h1 {
+  font-size: 300%;
+  color: var(--color-accent);
 }
 
 .resume h2 {
-  color: var(--color-accent);
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: 0.2em;
+}
+
+.resume h3 {
+  margin-bottom: 0;
+}
+
+.resume time {
+  color: oklch(50% 0% 0);
+  font-style: italic;
+}
+
+.resume article {
+  margin-block: 1.5em;
+}
+
+.resume section {
+  margin-block: 2em;
 }
