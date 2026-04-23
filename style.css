@@ -130,3 +130,22 @@ h1 {
   font-size: 80%;
   font-family: inherit;
 }
+
+#profile-stats dl {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+#profile-stats dt {
+  grid-row: 1;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  color: gray;
+}
+
+#profile-stats dd {
+  grid-row: 2;
+  font-size: 2em;
+  margin: 0;
+  font-weight: bold;
+}
