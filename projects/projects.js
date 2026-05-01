@@ -78,5 +78,5 @@ searchInput.addEventListener('input', (event) => {
     return matchesQuery && matchesYear;
   });
   renderProjects(filteredProjects, projectsContainer, 'h2');
-  renderPieChart(filteredProjects);
+  renderPieChart(projects);
 });
