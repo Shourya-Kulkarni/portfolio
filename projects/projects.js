@@ -9,11 +9,11 @@ const projectsTitle = document.querySelector('.projects-title');
 projectsTitle.textContent = `${projects.length} Projects`;
 
 let rolledData = d3.rollups(projects, v => v.length, d => d.year);
-let data = Object.fromEntries(rolledData);
+let data = rolledData.map(([label, value]) => ({ label, value }));
 
 let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
-let sliceGenerator = d3.pie();
-let arcData = sliceGenerator(Object.values(data));
+let sliceGenerator = d3.pie().value(d => d.value);
+let arcData = sliceGenerator(data);
 let arcs = arcData.map(d => arcGenerator(d));
 
 let colors = d3.scaleOrdinal(d3.schemeTableau10);
@@ -23,4 +23,12 @@ arcs.forEach((arc, idx) => {
     .append('path')
     .attr('d', arc)
     .attr('fill', colors(idx));
+});
+
+let legend = d3.select('.legend');
+data.forEach((d, idx) => {
+  legend.append('li')
+    .attr('style', `--color:${colors(idx)}`)
+    .attr('class', 'legend-item')
+    .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
 });
