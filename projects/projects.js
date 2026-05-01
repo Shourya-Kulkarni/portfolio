@@ -6,13 +6,14 @@ const projectsContainer = document.querySelector('.projects');
 const projectsTitle = document.querySelector('.projects-title');
 projectsTitle.textContent = `${projects.length} Projects`;
 
+let newData = [];
 let query = '';
 let selectedIndex = -1;
 let searchInput = document.querySelector('.searchBar');
 
 function renderPieChart(projectsGiven) {
   let newRolledData = d3.rollups(projectsGiven, v => v.length, d => d.year);
-  let newData = newRolledData.map(([label, value]) => ({ label, value }));
+  newData = newRolledData.map(([label, value]) => ({ label, value }));
 
   let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
   let sliceGenerator = d3.pie().value(d => d.value);
@@ -40,11 +41,18 @@ function renderPieChart(projectsGiven) {
           .attr('class', (_, idx) => idx === selectedIndex ? 'legend-item selected' : 'legend-item');
 
         if (selectedIndex === -1) {
-          renderProjects(projects, projectsContainer, 'h2');
-        } else {
-          let selectedYear = newData[selectedIndex].label;
-          let filtered = projects.filter(p => p.year === selectedYear);
-          renderProjects(filtered, projectsContainer, 'h2');
+            let filtered = projects.filter((project) => {
+                let values = Object.values(project).join('\n').toLowerCase();
+                return values.includes(query.toLowerCase());
+            });
+            renderProjects(filtered, projectsContainer, 'h2');
+            }else{
+            let selectedYear = newData[selectedIndex].label;
+            let filtered = projects.filter(p => {
+                let values = Object.values(p).join('\n').toLowerCase();
+                return p.year === selectedYear && values.includes(query.toLowerCase());
+            });
+            renderProjects(filtered, projectsContainer, 'h2');
         }
       });
   });
@@ -65,7 +73,9 @@ searchInput.addEventListener('input', (event) => {
   query = event.target.value;
   let filteredProjects = projects.filter((project) => {
     let values = Object.values(project).join('\n').toLowerCase();
-    return values.includes(query.toLowerCase());
+    let matchesQuery = values.includes(query.toLowerCase());
+    let matchesYear = selectedIndex === -1 || project.year === (newData?.[selectedIndex]?.label);
+    return matchesQuery && matchesYear;
   });
   renderProjects(filteredProjects, projectsContainer, 'h2');
   renderPieChart(filteredProjects);
