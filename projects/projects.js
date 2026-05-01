@@ -3,11 +3,11 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
 const projects = await fetchJSON('../lib/projects.json');
 const projectsContainer = document.querySelector('.projects');
-
 const projectsTitle = document.querySelector('.projects-title');
 projectsTitle.textContent = `${projects.length} Projects`;
 
 let query = '';
+let selectedIndex = -1;
 let searchInput = document.querySelector('.searchBar');
 
 function renderPieChart(projectsGiven) {
@@ -23,18 +23,37 @@ function renderPieChart(projectsGiven) {
   d3.select('#projects-pie-plot').selectAll('path').remove();
   d3.select('.legend').selectAll('li').remove();
 
-  arcs.forEach((arc, idx) => {
-    d3.select('#projects-pie-plot')
-      .append('path')
+  let svg = d3.select('#projects-pie-plot');
+
+  arcs.forEach((arc, i) => {
+    svg.append('path')
       .attr('d', arc)
-      .attr('fill', colors(idx));
+      .attr('fill', colors(i))
+      .attr('class', i === selectedIndex ? 'selected' : '')
+      .on('click', () => {
+        selectedIndex = selectedIndex === i ? -1 : i;
+
+        svg.selectAll('path')
+          .attr('class', (_, idx) => idx === selectedIndex ? 'selected' : '');
+
+        legend.selectAll('li')
+          .attr('class', (_, idx) => idx === selectedIndex ? 'legend-item selected' : 'legend-item');
+
+        if (selectedIndex === -1) {
+          renderProjects(projects, projectsContainer, 'h2');
+        } else {
+          let selectedYear = newData[selectedIndex].label;
+          let filtered = projects.filter(p => p.year === selectedYear);
+          renderProjects(filtered, projectsContainer, 'h2');
+        }
+      });
   });
 
   let legend = d3.select('.legend');
-  newData.forEach((d, idx) => {
+  newData.forEach((d, i) => {
     legend.append('li')
-      .attr('style', `--color:${colors(idx)}`)
-      .attr('class', 'legend-item')
+      .attr('style', `--color:${colors(i)}`)
+      .attr('class', i === selectedIndex ? 'legend-item selected' : 'legend-item')
       .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
   });
 }
@@ -42,7 +61,7 @@ function renderPieChart(projectsGiven) {
 renderPieChart(projects);
 renderProjects(projects, projectsContainer, 'h2');
 
-searchInput.addEventListener('change', (event) => {
+searchInput.addEventListener('input', (event) => {
   query = event.target.value;
   let filteredProjects = projects.filter((project) => {
     let values = Object.values(project).join('\n').toLowerCase();
