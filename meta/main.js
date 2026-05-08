@@ -65,7 +65,4 @@ function renderCommitInfo(data, commits) {
   dl.append('dt').text('Average line length');
   dl.append('dd').text(Math.round(d3.mean(data, d => d.length)));
 }
-
-let data = await loadData();
-let commits = processCommits(data);
 renderCommitInfo(data, commits);
