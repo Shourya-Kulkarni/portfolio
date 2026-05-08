@@ -274,3 +274,19 @@ circle:hover {
   transition-duration: 500ms;
   transition-property: opacity, visibility;
 }
+
+circle.selected {
+  fill: #ff6b6b;
+}
+
+@keyframes marching-ants {
+  to { stroke-dashoffset: -8; }
+}
+
+.selection {
+  fill-opacity: 0.1;
+  stroke: black;
+  stroke-opacity: 0.7;
+  stroke-dasharray: 5 3;
+  animation: marching-ants 2s linear infinite;
+}
