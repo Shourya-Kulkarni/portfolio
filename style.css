@@ -202,3 +202,22 @@ path {
 svg:has(path:hover) path:not(:hover) {
   opacity: 0.5;
 }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
+}
+
+.stats dt {
+  grid-row: 1;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  color: gray;
+}
+
+.stats dd {
+  grid-row: 2;
+  font-size: 2em;
+  margin: 0;
+  font-weight: bold;
+}
