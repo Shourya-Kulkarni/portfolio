@@ -5,7 +5,6 @@
     "year": "2026",
     "image": "https://shourya-kulkarni.github.io/Lab7-DSC106/images/lab7_dsc106.png",
     "description": "An interactive map visualization of bike traffic in the Boston area using Mapbox and D3. Shows bike lanes, station traffic volume, and allows filtering by time of day.",
-    "url": "https://shourya-kulkarni.github.io/Lab7-DSC106/"
     },
     {
         "title": "Lorem ipsum dolor sit.",
