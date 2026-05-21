@@ -290,3 +290,11 @@ circle.selected {
   stroke-dasharray: 5 3;
   animation: marching-ants 2s linear infinite;
 }
+
+circle {
+  transition: all 200ms;
+
+  @starting-style {
+    r: 0;
+  }
+}
