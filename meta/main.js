@@ -1,5 +1,6 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
+
 async function loadData() {
   const data = await d3.csv('loc.csv', (row) => ({
     ...row,
@@ -223,6 +224,7 @@ function renderScatterPlot(data, commits) {
 
   createBrushSelector(svg);
 }
+let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
 let data = await loadData();
 let commits = processCommits(data);
@@ -238,17 +240,6 @@ let timeScale = d3
   .range([0, 100]);
 let commitMaxTime = timeScale.invert(commitProgress);
 let filteredCommits = commits;
-
-function onTimeSliderChange() {
-  commitProgress = Number(document.getElementById('commit-progress').value);
-  commitMaxTime = timeScale.invert(commitProgress);
-  document.getElementById('commit-slider-time').textContent = commitMaxTime.toLocaleString('en', {
-    dateStyle: 'long',
-    timeStyle: 'short',
-  });
-  filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
-  updateScatterPlot(data, filteredCommits);
-}
 
 function updateFileDisplay(filteredCommits) {
   let lines = filteredCommits.flatMap((d) => d.lines);
@@ -272,9 +263,30 @@ function updateFileDisplay(filteredCommits) {
     );
 
   filesContainer.select('dt > code').text((d) => d.name);
-  filesContainer.select('dd').text((d) => `${d.lines.length} lines`);
+  filesContainer
+    .select('dd')
+    .selectAll('div')
+    .data((d) => d.lines)
+    .join('div')
+    .attr('class', 'loc')
+    .attr('style', (d) => `--color: ${colors(d.type)}`);
+} 
+
+function onTimeSliderChange() {
+  commitProgress = Number(document.getElementById('commit-progress').value);
+  commitMaxTime = timeScale.invert(commitProgress);
+  document.getElementById('commit-slider-time').textContent = commitMaxTime.toLocaleString('en', {
+    dateStyle: 'long',
+    timeStyle: 'short',
+  });
+  filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
+  updateScatterPlot(data, filteredCommits);
+  updateFileDisplay(filteredCommits);
 }
+
+
 renderScatterPlot(data, commits);
+updateFileDisplay(filteredCommits);
 
 document.getElementById('commit-progress').addEventListener('input', onTimeSliderChange);
 onTimeSliderChange();
@@ -319,4 +331,6 @@ function updateScatterPlot(data, commits) {
       updateTooltipVisibility(false);
     });
 }
+
+
 
