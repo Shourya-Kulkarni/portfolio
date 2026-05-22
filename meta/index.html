@@ -13,7 +13,7 @@
   <div>
     <label style="display:flex; align-items:baseline; gap:1em;">
       Show commits until:
-      <input type="range" id="commit-progress" min="0" max="100" value="100" style="flex:1;" />
+      <input type="range" id="commit-progress" min="0" max="100" value="0" style="flex:1;" />
     </label>
     <time id="commit-slider-time" style="display:block; text-align:right;"></time>
   </div>
@@ -21,6 +21,7 @@
   <div id="scrolly-1">
     <div id="scatter-story"></div>
     <div id="scatter-plot">
+      <h2>Commits by time of day</h2>
       <div id="chart"></div>
       <dl id="commit-tooltip" class="info tooltip" hidden>
         <dt>Commit</dt>
@@ -39,6 +40,7 @@
     </div>
   </div>
 
+<h2>Lines of Code by File</h2>
 <dl id="files"></dl>
 
 <script type="module" src="main.js"></script>
